@@ -1,6 +1,7 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useLayoutEffect } from "react";
 import { Image, ScrollView, StyleSheet, Text } from "react-native";
+import IconButton from "../../components/IconButton";
 import List from "../../components/flatListComponent";
 import MealDetailsComponent from "../../components/mealDetails";
 import SubTitle from "../../components/subTitle";
@@ -11,9 +12,17 @@ const MealDetails = () => {
   const { setOptions } = useNavigation();
   const mealId = params.mealId;
   const researchedMeal = MEALS.find((meal) => meal.id === mealId);
+  const onPress = () => {
+    console.log("onPress");
+  };
 
   useLayoutEffect(() => {
-    setOptions({ title: researchedMeal.title });
+    setOptions({
+      title: researchedMeal.title,
+      headerRight: () => {
+        return <IconButton onPress={onPress} icon={"star"} color={"white"} />;
+      },
+    });
   }, [researchedMeal, setOptions]);
   return (
     <ScrollView style={styles.container}>

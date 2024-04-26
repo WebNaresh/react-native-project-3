@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import {
   Image,
   Platform,
@@ -11,13 +11,10 @@ import {
 import MealDetailsComponent from "./mealDetails";
 
 const MealItem = ({ item }) => {
-  const { navigate, setOptions } = useNavigation();
+  const { navigate } = useNavigation();
   const onPress = () => {
     navigate("Meal Details", { mealId: item.id });
   };
-  useLayoutEffect(() => {
-    setOptions({ title: item.title });
-  }, [item.title, setOptions]);
 
   return (
     <View style={styles.container}>

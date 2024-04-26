@@ -5,25 +5,45 @@ import IconButton from "../../components/IconButton";
 import List from "../../components/flatListComponent";
 import MealDetailsComponent from "../../components/mealDetails";
 import SubTitle from "../../components/subTitle";
+// import { useFavorite } from "../../store/context/favorite-context";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavorite, removeFavorite } from "../../store/redux/favorites";
 import { MEALS } from "../../utility/dummy-data";
 
 const MealDetails = () => {
   const { params } = useRoute();
+  // const { removeFavorite, addFavorite, ids } = useFavorite();
+  const { ids } = useSelector((state) => state.favoriteMeals);
+  const dispatch = useDispatch();
+
   const { setOptions } = useNavigation();
   const mealId = params.mealId;
   const researchedMeal = MEALS.find((meal) => meal.id === mealId);
+
   const onPress = () => {
     console.log("onPress");
+    if (ids.includes(researchedMeal?.id)) {
+      // removeFavorite(researchedMeal?.id);
+      dispatch(removeFavorite({ id: researchedMeal?.id }));
+    } else {
+      dispatch(addFavorite({ id: researchedMeal?.id }));
+    }
   };
 
   useLayoutEffect(() => {
     setOptions({
       title: researchedMeal.title,
       headerRight: () => {
-        return <IconButton onPress={onPress} icon={"star"} color={"white"} />;
+        return (
+          <IconButton
+            onPress={onPress}
+            icon={ids.includes(researchedMeal?.id) ? "star" : "star-outline"}
+            color={"white"}
+          />
+        );
       },
     });
-  }, [researchedMeal, setOptions]);
+  }, [researchedMeal, setOptions, researchedMeal?.id, ids]);
   return (
     <ScrollView style={styles.container}>
       <Image
